@@ -1,0 +1,53 @@
+{
+  "name": "dsh-turn-bell",
+  "version": "1.3.0",
+  "type": "module",
+  "description": "Native DeepSeek Harness notifications, in the app's own icon and sound, when a turn finishes or the agent waits for your confirmation.",
+  "author": {
+    "name": "Billy王 (BillyWang)"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/BillyWang/dsh-turn-bell#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BillyWang/dsh-turn-bell.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BillyWang/dsh-turn-bell/issues"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "dsh",
+    "notifications",
+    "macos",
+    "productivity"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "icon.svg",
+    "assets/*"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}
