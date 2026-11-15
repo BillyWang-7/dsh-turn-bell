@@ -1,11 +1,11 @@
 # Registry entry for github.com/awesome-dsh-plugin/awesome-dsh-plugin
-# File path in that repository: data/plugins/BillyWang__dsh-turn-bell.yml
+# File path in that repository: data/plugins/BillyWang-7__dsh-turn-bell.yml
 # One PR = one file. Rename owner/repo here if the GitHub account differs.
-url: https://github.com/BillyWang/dsh-turn-bell
-name: BillyWang/dsh-turn-bell
+url: https://github.com/BillyWang-7/dsh-turn-bell
+name: BillyWang-7/dsh-turn-bell
 category: notify
 description:
   en: Native DeepSeek Harness notifications, in the app's own icon and sound, when a turn finishes or the agent waits for your confirmation; clicking the banner opens that conversation.
   zh: 用 DeepSeek Harness 自己的图标与提示音，在回答完成或需要你确认时弹出横幅；点一下直接切到那条会话。
-icon: https://raw.githubusercontent.com/BillyWang/dsh-turn-bell/main/assets/icon-180.png
-# tarball: https://github.com/BillyWang/dsh-turn-bell/releases/latest/download/dsh-turn-bell.tgz
+icon: https://raw.githubusercontent.com/BillyWang-7/dsh-turn-bell/main/assets/icon-180.png
+# tarball: https://github.com/BillyWang-7/dsh-turn-bell/releases/latest/download/dsh-turn-bell.tgz

@@ -7,13 +7,13 @@
     "name": "Billy王 (BillyWang)"
   },
   "license": "MIT",
-  "homepage": "https://github.com/BillyWang/dsh-turn-bell#readme",
+  "homepage": "https://github.com/BillyWang-7/dsh-turn-bell#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BillyWang/dsh-turn-bell.git"
+    "url": "git+https://github.com/BillyWang-7/dsh-turn-bell.git"
   },
   "bugs": {
-    "url": "https://github.com/BillyWang/dsh-turn-bell/issues"
+    "url": "https://github.com/BillyWang-7/dsh-turn-bell/issues"
   },
   "keywords": [
     "dsh-plugin",

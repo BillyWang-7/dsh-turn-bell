@@ -7,7 +7,7 @@
 
 ## 0. 需要的东西
 
-- GitHub 账号（假设为 `BillyWang`；不是的话把本文件与 `registry-entry.yml` 里的 `owner` 全改掉）。
+- GitHub 账号（假设为 `BillyWang-7`；不是的话把本文件与 `registry-entry.yml` 里的 `owner` 全改掉）。
 - GitHub token：classic PAT，勾 `repo`（建仓库、push、开 PR 都要）。
 - npm token：Automation 类型（`npm publish` 用，绕过 2FA 交互）。
 
@@ -31,7 +31,7 @@ curl -sf -X POST https://api.github.com/user/repos \
 ## 2. 推送
 
 ```sh
-git remote add origin https://github.com/BillyWang/dsh-turn-bell.git
+git remote add origin https://github.com/BillyWang-7/dsh-turn-bell.git
 git push -u origin main
 ```
 
@@ -56,7 +56,7 @@ gh release create v1.3.0 dsh-turn-bell.tgz --title "Turn Bell 1.3.0" --notes-fil
 
 ## 5. 提 PR 到插件目录
 
-一个 PR 只加一个文件：`data/plugins/BillyWang__dsh-turn-bell.yml`，内容复制 `registry-entry.yml`。
+一个 PR 只加一个文件：`data/plugins/BillyWang-7__dsh-turn-bell.yml`，内容复制 `registry-entry.yml`。
 
 ```sh
 # 5.1 fork
@@ -65,18 +65,18 @@ curl -sf -X POST https://api.github.com/repos/awesome-dsh-plugin/awesome-dsh-plu
 
 # 5.2 在 fork 上写文件（base64）
 B64=$(base64 -i publish/registry-entry.yml | tr -d '\n')
-curl -sf -X PUT "https://api.github.com/repos/BillyWang/awesome-dsh-plugin/contents/data/plugins/BillyWang__dsh-turn-bell.yml" \
+curl -sf -X PUT "https://api.github.com/repos/BillyWang-7/awesome-dsh-plugin/contents/data/plugins/BillyWang-7__dsh-turn-bell.yml" \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github+json" \
-  -d "{\"message\":\"Add BillyWang/dsh-turn-bell\",\"content\":\"$B64\",\"branch\":\"add-dsh-turn-bell\"}"
+  -d "{\"message\":\"Add BillyWang-7/dsh-turn-bell\",\"content\":\"$B64\",\"branch\":\"add-dsh-turn-bell\"}"
 
 # 5.3 开 PR（注意不是提到 dsh-market 仓库）
 curl -sf -X POST https://api.github.com/repos/awesome-dsh-plugin/awesome-dsh-plugin/pulls \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github+json" \
   -d '{
-    "title": "Add BillyWang/dsh-turn-bell",
-    "head": "BillyWang:add-dsh-turn-bell",
+    "title": "Add BillyWang-7/dsh-turn-bell",
+    "head": "BillyWang-7:add-dsh-turn-bell",
     "base": "main",
     "body": "Turn Bell (收工铃): native DSH notifications in the app icon and sound for turn completion and pending confirmations, with click-through to the exact conversation. Repo declares dsh.bundle + cordis.patch.yml and is installable via `dsh plugin add dsh-turn-bell`."
   }'
