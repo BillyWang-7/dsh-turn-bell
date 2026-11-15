@@ -4,6 +4,10 @@
 
 > 现状：本机没有任何 GitHub / npm 凭证（无 `gh`、无 SSH key、无 npm token、无 keychain 条目），
 > 所以推送、建仓库、开 PR、`npm publish` 都还没有执行。凭证到手后按下面顺序跑即可。
+>
+> 网络注意：这台机器 `api.github.com` 通（200），但 `github.com:443` 不通（000），
+> 所以 `git push https://github.com/...` 会卡死；建仓库、写文件、提交、开 PR 全部走 REST API
+> （blobs → trees → commits → refs），不依赖 git 协议。
 
 ## 0. 需要的东西
 
