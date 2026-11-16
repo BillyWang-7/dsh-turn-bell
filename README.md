@@ -30,22 +30,22 @@ dsh plugin add dsh-turn-bell
 dsh plugin add /path/to/dsh-turn-bell
 ```
 
-装好后刷新一次 Web 页面（Cmd+R）或重开窗口，让新的客户端模块加载。
+装好后刷新一次 Web 页面（macOS 按 Cmd+R，Windows / Linux 按 Ctrl+R）或重开窗口，让新的客户端模块加载。
 
 ### 通知权限与声音
 
-系统设置 → 通知 → DeepSeek Harness。第一次弹之前系统可能先问你一次是否允许；关掉过的话在这里重新打开。横幅样式、提示音、专注模式屏蔽都在这一页。
+系统设置 → 通知 → DeepSeek Harness（Windows：设置 → 系统 → 通知；Linux：系统通知设置里找 DeepSeek Harness）。第一次弹之前系统可能先问你一次是否允许；关掉过的话在这里重新打开。横幅样式与专注模式屏蔽都在这一页。提示音在 macOS 上可由宿主兜底通道的 `sound` 指定；渲染通道与 Windows 的提示音跟随系统，不想响就在系统里把 DSH 的通知声音关掉。
 
 ### 配置（宿主兜底，一般不用开）
 
-插件带一个宿主端的 `osascript` 兜底通道，默认关闭。只有在渲染进程不可用（比如纯 CLI 场景需要通知）时才需要打开；那条通道的横幅会被系统归到「脚本编辑器」，所以不建议和渲染进程通道同时开。
+插件带一个宿主端兜底通道（macOS 用 `osascript`，Linux 用 `notify-send`），默认关闭。只有在渲染进程不可用（比如纯 CLI 场景需要通知）时才需要打开；macOS 上那条通道的横幅会被系统归到「脚本编辑器」，所以不建议和渲染进程通道同时开。Windows 不提供宿主通道——桌面端始终有渲染进程，用渲染通道即可。
 
 | 键 | 默认 | 含义 |
 | --- | --- | --- |
 | `enabled` | `false` | 打开宿主端兜底横幅 |
 | `title` | `DeepSeek Harness` | 兜底横幅标题 |
 | `subtitle` | `任务完成` | 兜底横幅副标题，留空则不显示 |
-| `sound` | `Glass` | 兜底提示音；`silent` 表示不响 |
+| `sound` | `Glass` | 兜底提示音（仅 macOS）；`silent` 表示不响 |
 | `notifySubagents` | `false` | 子代理会话也通知（仅兜底通道） |
 | `notifyOnBlocked` | `false` | `blocked` 的轮次也通知（仅兜底通道） |
 
@@ -56,7 +56,9 @@ dsh plugin add /path/to/dsh-turn-bell
 - 只在 DSH Web / 桌面渲染进程里生效，纯 CLI 收不到（那条路走上面的兜底通道）。
 - 依赖客户端发布的 `uiSession.sessionStatus` 和 `uiWorkspace.openSession`，在 DSH 0.2.x 上验证（0.2.2-rc.3）。
 - macOS 上点通知的激活行为由系统决定：焦点在别的 app 时，点横幅会先激活 DSH，再切到目标会话。
-- Windows / Linux 未测试。
+- 三个桌面平台都支持：macOS、Windows、Linux 都用 Electron 渲染进程的 Notification，横幅上是 DSH 的应用身份与图标。
+- Windows 的宿主兜底通道不提供（桌面端始终有渲染进程）；Linux 的 `notify-send` 兜底需要系统装有 libnotify。
+- 尚未在三套系统上逐一人工验证，若某个平台不响请提 issue。
 
 ### 开发
 
@@ -96,22 +98,22 @@ From a local checkout during development:
 dsh plugin add /path/to/dsh-turn-bell
 ```
 
-Reload the Web page (Cmd+R) or reopen the window afterwards so the client module is picked up.
+Reload the Web page (Cmd+R on macOS, Ctrl+R on Windows and Linux) or reopen the window afterwards so the client module is picked up.
 
 ### Permission and sound
 
-System Settings → Notifications → DeepSeek Harness. macOS may ask once before the first banner; if it was turned off, re-enable it there. Banner style, sound and Focus filtering live on that page.
+System Settings → Notifications → DeepSeek Harness (Windows: Settings → System → Notifications; Linux: the system notification settings). The OS may ask once before the first banner; if it was turned off, re-enable it there. Banner style and Focus filtering live on that page. On macOS the fallback channel can pick a sound name; the renderer channel — and Windows generally — use the system default, so turn the app's notification sound off in the OS to silence it.
 
 ### Configuration (host fallback, off by default)
 
-A host-side `osascript` fallback ships disabled. Enable it only where the renderer is unavailable; banners from that path are attributed to “Script Editor”, so do not run both channels at once.
+A host-side fallback ships disabled (`osascript` on macOS, `notify-send` on Linux). Enable it only where the renderer is unavailable; on macOS banners from that path are attributed to “Script Editor”, so do not run both channels at once. Windows has no host channel — the desktop app always has a renderer.
 
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `enabled` | `false` | Turn the host-side banner on |
 | `title` | `DeepSeek Harness` | Fallback banner title |
 | `subtitle` | `任务完成` | Fallback subtitle; empty omits it |
-| `sound` | `Glass` | Fallback sound name; `silent` for none |
+| `sound` | `Glass` | Fallback sound name (macOS only); `silent` for none |
 | `notifySubagents` | `false` | Also notify for subagent turns (fallback only) |
 | `notifyOnBlocked` | `false` | Also notify for `blocked` turns (fallback only) |
 
@@ -122,7 +124,9 @@ Set these in the plugin's `cordis.patch.yml`, or edit the row in the plugin list
 - Works in the DSH Web / desktop renderer; a plain CLI session gets nothing unless the fallback channel is enabled.
 - Relies on the client-side `uiSession.sessionStatus` and `uiWorkspace.openSession` APIs; verified on DSH 0.2.x (0.2.2-rc.3).
 - Notification click behaviour is macOS's: with focus in another app, the banner activates DSH first and then navigates.
-- Windows and Linux are untested.
+- All three desktop platforms are supported: macOS, Windows and Linux post through the Electron renderer's Notification, so the banner carries DSH's identity and icon.
+- There is no host fallback on Windows (the desktop app always has a renderer); the Linux `notify-send` fallback needs libnotify installed.
+- Not yet checked by hand on all three systems — open an issue if one of them stays silent.
 
 ### Development
 

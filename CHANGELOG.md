@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.0
+
+- **Windows and Linux support.** The banner channel is the Electron renderer,
+  which exists on all three desktop platforms: macOS, Windows, Linux. Same app
+  identity, same icon, same click-to-open-conversation behaviour.
+- The host fallback now dispatches per platform: `osascript` on macOS,
+  `notify-send` on Linux, and a logged no-op on Windows. Its argument building
+  is a pure `buildCommand()` and is unit-tested for every platform
+  (`node test/host-harness.mjs`).
+- Docs cover per-platform permission pages, sound behaviour (macOS can name a
+  fallback sound; the renderer and Windows follow the system default) and the
+  reload shortcut (Cmd+R / Ctrl+R).
+
 ## 1.3.0
 
 - Renamed to **收工铃 / Turn Bell** (`dsh-turn-bell`) for publication.

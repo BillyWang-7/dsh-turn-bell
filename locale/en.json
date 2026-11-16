@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Turn Bell",
-    "description": "Posts a native notification, under DeepSeek Harness's own icon and sound, when a turn finishes or when the agent is waiting for you to approve an action or answer a question — so you can look away while a task runs. Clicking the banner opens the conversation it is about. The banner comes from the DSH Web page under the app's own identity; subagent turns stay silent, the conversation already on screen in a focused window stays quiet, and the first snapshot after a page load is only a baseline. A host-side osascript fallback (attributed to Script Editor) is off by default; enable it with enabled in the bundle's cordis.patch.yml, which also exposes title, subtitle, sound, notifySubagents and notifyOnBlocked."
+    "description": "Posts a native notification, under DeepSeek Harness's own icon and sound, when a turn finishes or when the agent is waiting for you to approve an action or answer a question — on macOS, Windows and Linux alike. Clicking the banner opens the conversation it is about. The banner comes from the DSH Web page under the app's own identity; subagent turns stay silent, the conversation already on screen in a focused window stays quiet, and the first snapshot after a page load is only a baseline. A host-side fallback (osascript on macOS, notify-send on Linux, none on Windows) is off by default; enable it with enabled in the bundle's cordis.patch.yml, which also exposes title, subtitle, sound, notifySubagents and notifyOnBlocked."
   }
 }

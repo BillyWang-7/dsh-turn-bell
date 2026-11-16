@@ -1,11 +1,21 @@
 /**
- * Posts a macOS notification when an agent turn finishes, so a long-running
- * answer does not have to be watched to know it is done.
+ * Host-side fallback for Turn Bell: posts a system notification when an agent
+ * turn finishes, for setups that have no renderer attached (a plain CLI), so a
+ * long-running answer does not have to be watched to know it is done.
  *
- * Host-only: the desktop shell runs this plugin inside the dsh runtime child
- * process, which cannot reach the Electron Notification API, so the banner is
- * delivered through `osascript`. Every value is escaped before it reaches the
- * AppleScript source; a failure only logs and never affects the turn.
+ * The renderer half (`client.js`) is the primary channel and the only one that
+ * works on all three desktop platforms; this file exists for the rest:
+ *
+ *   macOS    `/usr/bin/osascript -e 'display notification …'`
+ *            (banners are attributed to “Script Editor”, which is why the
+ *            channel is off by default)
+ *   Linux    `notify-send` from libnotify, when it is installed
+ *   Windows  nothing — the desktop app always has a renderer, and Windows has
+ *            no notifier that is guaranteed to exist on every machine, so this
+ *            channel logs once and stays silent rather than inventing one.
+ *
+ * Every value is escaped before it reaches a shell-free argument list, and a
+ * delivery failure only logs; it never affects the turn.
  */
 import { execFile } from 'node:child_process'
 
@@ -27,6 +37,31 @@ function literal(value) {
   return `"${text.replace(/[\\"]/g, character => `\\${character}`)}"`
 }
 
+/**
+ * The command that delivers one banner on `platform`, or `null` when the
+ * platform has no dependable command-line notifier. Pure, so it is unit-tested
+ * for every platform on every platform.
+ */
+export function buildCommand(platform, options, body) {
+  if (platform === 'darwin') {
+    const parts = [`display notification ${literal(body)}`]
+    if (options.title) parts.push(`with title ${literal(options.title)}`)
+    if (options.subtitle) parts.push(`subtitle ${literal(options.subtitle)}`)
+    if (options.sound && options.sound !== 'silent') parts.push(`sound name ${literal(options.sound)}`)
+    return { command: '/usr/bin/osascript', args: ['-e', parts.join(' ')] }
+  }
+  if (platform === 'linux') {
+    // notify-send SUMMARY [BODY]; the app name keeps the banner grouped under
+    // DeepSeek Harness in notification daemons that honour it.
+    const summary = String(options.title || 'DeepSeek Harness')
+    const args = ['--app-name', summary]
+    if (options.sound === 'silent') args.push('--hint', 'string:sound-name:')
+    args.push(summary, String(body))
+    return { command: 'notify-send', args }
+  }
+  return null
+}
+
 /** Normalize a TurnEndReason (object or bare kind) to its kind. */
 function kindOf(reason) {
   if (typeof reason === 'string') return reason
@@ -39,6 +74,7 @@ export function apply(ctx, config) {
   if (options.enabled === false) return
 
   const logger = ctx.logger('turn-bell')
+  let warned = false
 
   const post = (session) => {
     let sessionTitle = ''
@@ -48,11 +84,15 @@ export function apply(ctx, config) {
       // The title service is optional here; the generic body still works.
     }
     const body = sessionTitle.length > 0 ? sessionTitle : '回答已完成'
-    const parts = [`display notification ${literal(body)}`]
-    if (options.title) parts.push(`with title ${literal(options.title)}`)
-    if (options.subtitle) parts.push(`subtitle ${literal(options.subtitle)}`)
-    if (options.sound) parts.push(`sound name ${literal(options.sound)}`)
-    execFile('/usr/bin/osascript', ['-e', parts.join(' ')], { timeout: 5000 }, (error) => {
+    const invocation = buildCommand(process.platform, options, body)
+    if (invocation === null) {
+      if (!warned) {
+        warned = true
+        logger.warn('no host-side notifier for this platform; use the renderer channel')
+      }
+      return
+    }
+    execFile(invocation.command, invocation.args, { timeout: 5000 }, (error) => {
       if (error) logger.warn(error)
     })
   }

@@ -3,8 +3,10 @@
       name: dsh-turn-bell
       config:
         # The browser half (client.js) posts the banner under the app's own
-        # identity and icon. The host half is the osascript fallback; turn it on
-        # (set enabled: true) only if the renderer half cannot be used.
+        # identity and icon on macOS, Windows and Linux. The host half is the
+        # fallback used only when no renderer is attached: osascript on macOS,
+        # notify-send on Linux, and nothing on Windows. Turn it on (set
+        # enabled: true) only if the renderer half cannot be used.
         enabled: false
         title: DeepSeek Harness
         subtitle: 任务完成

@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "收工铃",
-    "description": "一轮回答收工、或者智能体正等你确认操作/回答问题时，用 DeepSeek Harness 自己的应用图标和提示音弹出系统通知，可以放心切到别处等任务跑完。通知由 DSH Web 页面以应用自身身份发出；子代理的轮次不会打扰你，当前会话正在前台看着时也不弹，点一下把窗口带回前台。宿主端的 osascript 兜底默认关闭（那条横幅会显示为「脚本编辑器」），需要时可在 cordis.patch.yml 里把 enabled 设为 true，并调整 title、subtitle、sound、notifySubagents、notifyOnBlocked。"
+    "description": "一轮回答收工、或者智能体正等你确认操作/回答问题时，用 DeepSeek Harness 自己的应用图标和提示音弹出系统通知，macOS、Windows、Linux 桌面版都支持，可以放心切到别处等任务跑完。通知由 DSH Web 页面以应用自身身份发出；子代理的轮次不会打扰你，当前会话正在前台看着时也不弹，点一下直接跳到那条对话。宿主端兜底默认关闭：macOS 走 osascript（横幅显示为「脚本编辑器」），Linux 走 notify-send，Windows 不提供；需要时在 cordis.patch.yml 里把 enabled 设为 true，并调整 title、subtitle、sound、notifySubagents、notifyOnBlocked。"
   }
 }
