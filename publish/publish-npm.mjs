@@ -94,6 +94,7 @@ try {
     console.error(`publish failed: HTTP ${String(status)}\n${text.slice(0, 2000)}`)
     process.exit(1)
   }
+  if (text.trim() !== '') console.log(text.trim())
   console.log(`published ${pkg.name}@${version}: HTTP ${String(status)}`)
   console.log(`install with: dsh plugin add ${pkg.name}`)
 } finally {
