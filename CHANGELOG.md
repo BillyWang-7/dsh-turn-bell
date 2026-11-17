@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- npm：包页面现在带完整 README，描述改为中英双语（无功能变化）。
+
 ## 2.0.0
 
 - **Windows and Linux support.** The banner channel is the Electron renderer,

@@ -37,7 +37,13 @@ const body = {
   description: pkg.description,
   'dist-tags': { latest: version },
   versions: {
-    [version]: { ...pkg, _id: `${pkg.name}@${version}`, dist: { shasum, integrity, tarball } },
+    [version]: {
+      ...pkg,
+      _id: `${pkg.name}@${version}`,
+      readme: readFileSync(join(root, 'README.md'), 'utf8'),
+      readmeFilename: 'README.md',
+      dist: { shasum, integrity, tarball },
+    },
   },
   readme: readFileSync(join(root, 'README.md'), 'utf8'),
   _attachments: {

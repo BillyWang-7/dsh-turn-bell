@@ -1,8 +1,8 @@
 {
   "name": "dsh-turn-bell",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
-  "description": "Native DeepSeek Harness notifications on macOS, Windows and Linux — the app's own icon and sound — when a turn finishes or the agent waits for your confirmation.",
+  "description": "收工铃 Turn Bell — DeepSeek Harness 原生通知：一轮回答结束或需要你确认时提醒，点击直达对应会话（macOS / Windows / Linux）。Native notifications in the app's own icon and sound.",
   "author": {
     "name": "Billy王 (BillyWang)"
   },
